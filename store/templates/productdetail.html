@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block title %}
+  {{ product.name }} | SB Jewellery
+{% endblock %}
+{% block content %}
+  <div class="container my-5 py-4">
+    <div class="row align-items-start">
+      
+      <!-- Premium Showcase Image Display Frame -->
+      <div class="col-md-6 text-center mb-4 mb-md-0">
+        <div class="p-3 bg-white" style="border: 1px solid #f2eee9; border-radius: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.02);">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 500px; width: auto; object-fit: contain;" />
+        </div>
+      </div>
+      
+      <!-- Minimalist Luxury Product Specs & Actions -->
+      <div class="col-md-5 offset-md-1 pt-2">
+        
+        <span class="text-uppercase tracking-wider text-muted font-weight-light d-block mb-2" style="font-size: 0.75rem; letter-spacing: 3px;">
+          Exclusive Collection
+        </span>
+        
+        <h1 class="font-weight-light text-dark mb-3" style="font-size: 2.2rem; letter-spacing: -0.5px;">
+          {{ product.name }}
+        </h1>
+        
+        <div class="mb-4 pb-2 border-bottom" style="border-color: #f7f5f2 !important;">
+          <span class="text-dark font-weight-normal" style="font-size: 1.75rem; letter-spacing: 0.5px;">
+            ₹{{ product.price }}
+          </span>
+          <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">MRP Inclusive of all taxes</small>
+        </div>
+        
+        <div class="mb-4">
+          <small class="text-muted text-uppercase font-weight-bold d-block mb-2" style="font-size: 0.7rem; letter-spacing: 1.5px;">
+            Description
+          </small>
+          <p class="text-secondary" style="line-height: 1.7; font-size: 0.9rem; font-weight: 300; white-space: pre-line;">
+            {{ product.description }}
+          </p>
+        </div>
+
+        {% if request.session.phone %}
+          <div class="mt-5">
+            {% if item_already_in_cart %}
+              <a href="/show_cart" class="btn btn-warning btn-block shadow-sm py-3 font-weight-normal text-uppercase tracking-wider mb-3" style="border-radius: 0; font-size: 0.85rem; letter-spacing: 1.5px;">
+                View Inside Your Cart
+              </a>
+            {% else %}
+              
+              <div class="form-row align-items-center no-gutters">
+                
+                <!-- 1. Triggers the modern Bootstrap shipping address modal input dialog container layout -->
+                <div class="col-12 mb-3">
+                  <button type="button" class="btn btn-block py-3 text-uppercase font-weight-normal transition-all" data-toggle="modal" data-target="#shippingModal"
+                     style="background-color: #000000; color: #ffffff; border: 1px solid #000000; border-radius: 0; font-size: 0.85rem; letter-spacing: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.2s ease;">
+                    Buy It Now
+                  </button>
+                </div>
+                
+                <!-- 2. Minimalist Contemporary Secondary Cart Action Button -->
+                <div class="col-9 pr-2">
+                  <form action="{% url 'add_to_cart' %}" method="get" class="m-0">
+                    {% csrf_token %}
+                    <input type="hidden" name="prod_id" value="{{ product.id }}" id="prod_id" />
+                    <button type="submit" class="btn btn-block btn-outline-dark py-3 text-uppercase font-weight-light" 
+                            style="border-radius: 0; border-color: #cccccc; font-size: 0.8rem; letter-spacing: 1.5px; background: transparent; color: #1a1a1a; transition: all 0.2s ease;">
+                      Add To Cart
+                    </button>
+                  </form>
+                </div>
+
+                <!-- 3. Sleek Luxury Geometric Wishlist Toggle Switch Button -->
+                <div class="col-3 pl-1">
+                  <a href="{% url 'toggle_wishlist' %}?prod_id={{ product.id }}" 
+                     class="btn btn-block py-3 d-flex align-items-center justify-content-center transition-all"
+                     style="border-radius: 0; border: 1px solid {% if is_wishlisted %}#dc3545{% else %}#cccccc{% endif %}; background-color: {% if is_wishlisted %}#fdf2f2{% else %}transparent{% endif %}; height: 100%; transition: all 0.2s ease;">
+                    <span style="font-size: 1.15rem; transform: translateY(-1px); display: inline-block;">
+                      {% if is_wishlisted %}❤️{% else %}🤍{% endif %}
+                    </span>
+                  </a>
+                </div>
+
+              </div>
+            {% endif %}
+          </div>
+        {% else %}
+          <div class="mt-5 p-3 text-center" style="background-color: #f7f5f2; border-radius: 4px;">
+            <p class="small text-muted mb-0">Please <a href="/login" class="text-dark font-weight-bold">Sign In</a> to place orders.</p>
+          </div>
+        {% endif %}
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- MODERN SHIPPING DESTINATION INFORMATION CAPTURE MODAL DIALOG POPUP CONTAINER -->
+  <div class="modal fade" id="shippingModal" tabindex="-1" aria-labelledby="shippingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 0; border: none; box-shadow: 0 15px 50px rgba(0,0,0,0.15);">
+        
+        <!-- Modal Heading Design Frame Layout -->
+        <div class="modal-header border-0 pt-4 px-4 pb-2">
+          <h5 class="modal-title font-weight-light text-uppercase tracking-wider" id="shippingModalLabel" style="font-size: 1.1rem; letter-spacing: 1.5px;">
+            Shipping Destination
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline: none;">
+            <span aria-hidden="true" style="font-size: 1.4rem; font-weight: 300;">&times;</span>
+          </button>
+        </div>
+        
+        <!-- Modal Interactive Post Form Framework Interface Entry -->
+        <form action="{% url 'buy_now' product.id %}" method="POST" class="m-0">
+          {% csrf_token %}
+          <div class="modal-body px-4 pb-4">
+            
+            <div class="form-group mb-3">
+              <label class="text-muted small text-uppercase tracking-wide font-weight-bold" style="font-size: 0.65rem;">Recipient Full Name</label>
+              <input type="text" name="recipient_name" class="form-control modern-input" placeholder="e.g. Rahul Sharma" required>
+            </div>
+            
+            <div class="form-group mb-3">
+              <label class="text-muted small text-uppercase tracking-wide font-weight-bold" style="font-size: 0.65rem;">Shipping Address</label>
+              <textarea name="shipping_address" class="form-control modern-input" rows="3" placeholder="Apartment, Street Name, City, Pincode" required></textarea>
+            </div>
+            
+            <div class="form-group mb-4">
+              <label class="text-muted small text-uppercase tracking-wide font-weight-bold" style="font-size: 0.65rem;">Contact Mobile Number</label>
+              <input type="tel" name="contact_mobile" class="form-control modern-input" value="{{ request.session.phone }}" placeholder="10-digit mobile number" pattern="[0-9]{10,}" required>
+            </div>
+
+            <!-- Ultimate Proceed Gateway Transaction Execution Button Trigger node -->
+            <button type="submit" class="btn btn-dark btn-block py-3 text-uppercase font-weight-normal tracking-wider" 
+                    style="background-color: #000000; border-radius: 0; font-size: 0.8rem; letter-spacing: 1.5px;">
+              Proceed to Payment
+            </button>
+            
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Smooth Visual Enhancements Custom Style Layer override settings -->
+  <style>
+    .transition-all:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
+    }
+    .btn-outline-dark:hover {
+      background-color: #1a1a1a !important;
+      color: #ffffff !important;
+      border-color: #1a1a1a !important;
+    }
+    .modern-input {
+      border-radius: 0 !important;
+      border: 1px solid #e1dbd5 !important;
+      font-size: 0.9rem !important;
+      padding: 0.6rem 0.8rem !important;
+      background-color: #fdfbfa !important;
+      transition: all 0.2s ease;
+    }
+    .modern-input:focus {
+      outline: none !important;
+      box-shadow: none !important;
+      background-color: #ffffff !important;
+      border-color: #000000 !important;
+    }
+  </style>
+{% endblock %}

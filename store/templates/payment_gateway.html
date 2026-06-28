@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processing Test Payment...</title>
+</head>
+<body>
+    <!-- Container to dynamically update text on success -->
+    <div style="text-align: center; margin-top: 100px; font-family: sans-serif;">
+        <div id="status-container">
+            <h2 style="color: #007bff;">Connecting to Server...</h2>
+            <p>Verifying your test transaction credentials. Please wait.</p>
+        </div>
+    </div>
+
+    <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const container = document.getElementById('status-container');
+
+        fetch("/payment-verify/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                "razorpay_payment_id": "pay_mock" + Math.random().toString(36).substring(2, 11),
+                "razorpay_order_id": "{{ order_id }}",
+                "razorpay_signature": "bypass_signature_verification_for_testing"
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'Payment Verified Successfully') {
+                // Update UI text on success
+                container.innerHTML = `
+                    <h2 style="color: #28a745; font-size: 2rem;">✓ Payment Verified Successfully!</h2>
+                    <p style="color: #555;">Your order is confirmed. Redirecting to your profile history shortly...</p>
+                `;
+
+                // DELAY: Wait 3000 milliseconds (3 seconds) before running redirect
+                setTimeout(() => {
+                    window.location.href = "/order/"; 
+                }, 3000);
+
+            } else {
+                container.innerHTML = `
+                    <h2 style="color: #dc3545;">Simulated Verification Failed.</h2>
+                    <p>Returning to cart...</p>
+                `;
+                setTimeout(() => { window.location.href = "/show_cart/"; }, 2000);
+            }
+        })
+        .catch(err => {
+            console.error("Connection failed:", err);
+            window.location.href = "/show_cart/";
+        });
+    });
+    </script>
+</body>
+</html>

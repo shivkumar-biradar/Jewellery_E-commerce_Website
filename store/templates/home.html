@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Collections | SB Jewellery{% endblock %}
+
+{% block content %}
+<style>
+    /* 1. Global Reset to replicate the bright, clean, premium storefront layout */
+    body {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    
+    /* 2. Left Collection Sidebar Filtering */
+    .sb-jewellery-sidebar {
+        position: sticky;
+        top: 100px;
+    }
+    .sb-jewellery-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #2c2c2c;
+        border-bottom: 2px solid #1a1a1a;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.2rem;
+    }
+    .sb-jewellery-filter-item {
+        border: none !important;
+        background: transparent !important;
+        color: #555555 !important;
+        font-size: 0.95rem;
+        padding: 0.6rem 0.5rem !important;
+        transition: color 0.2s ease, font-weight 0.2s ease;
+    }
+    .sb-jewellery-filter-item:hover {
+        color: #000000 !important;
+        text-decoration: underline;
+    }
+    .sb-jewellery-filter-item.active {
+        color: #000000 !important;
+        font-weight: 700 !important;
+    }
+
+    /* 3. Borderless Premium Product Grid Cards System */
+    .sb-jewellery-card {
+        border: none !important;
+        background: transparent !important;
+        position: relative;
+        text-decoration: none !important;
+        display: block;
+        margin-bottom: 2.5rem;
+    }
+    .sb-jewellery-img-stage {
+        background-color: #fcfaf7; /* Softer premium off-white background canvas card block */
+        height: 340px; /* Taller viewport bounds scale to display portrait self-modeling photos beautifully */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+        transition: background-color 0.2s ease;
+    }
+    .sb-jewellery-card:hover .sb-jewellery-img-stage {
+        background-color: #f6f3ee; /* Smooth darkening transition shade on focus */
+    }
+    .sb-jewellery-img-stage img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover; /* Enforces personal modeling portrait images to fill squares completely with zero blank gaps */
+        transition: transform 0.4s ease-out;
+    }
+    .sb-jewellery-card:hover .sb-jewellery-img-stage img {
+        transform: scale(1.025); /* Subtle fluid macro lens zoom effect loop */
+    }
+
+    /* Card Typography Layout adjustments outside and underneath image blocks */
+    .sb-jewellery-product-name {
+        font-size: 0.88rem;
+        color: #2c2c2c;
+        font-weight: 400;
+        margin-top: 0.85rem;
+        margin-bottom: 0.2rem;
+        line-height: 1.4;
+    }
+    .sb-jewellery-price-tag {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: #000000;
+        margin-bottom: 0.5rem;
+    }
+
+    /* 4. Luxury Pure Text Filter Bar */
+    .luxury-sort-bar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding-bottom: 0.8rem;
+        border-bottom: 1px solid #f2f2f2;
+    }
+    .luxury-sort-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888888;
+    }
+    .luxury-sort-link {
+        font-size: 0.8rem;
+        color: #777777;
+        text-decoration: none !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: color 0.2s ease;
+        background: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    .luxury-sort-link:hover {
+        color: #000000;
+    }
+    .luxury-sort-link.active {
+        color: #000000;
+        font-weight: 700;
+        border-bottom: 1px solid #1a1a1a;
+    }
+</style>
+
+<div class="container-fluid px-md-5 mt-5">
+    <div class="row">
+        
+        <!-- Left Side: Clean Minimalist Filter Navigation -->
+        <div class="col-lg-2 mb-5">
+            <div class="sb-jewellery-sidebar">
+                <div class="sb-jewellery-title">Categories</div>
+                <div class="list-group">
+                    <a href="/" data-category="" class="category-btn list-group-item list-group-item-action sb-jewellery-filter-item {% if not request.GET.category %}active{% endif %}">
+                        All Treasures
+                    </a>
+                    {% for category in categories %}
+                    <a href="/?category={{category.id}}" data-category="{{category.id}}" class="category-btn list-group-item list-group-item-action sb-jewellery-filter-item {% if request.GET.category == category.id|stringformat:'i' %}active{% endif %}">
+                        {{category.name}}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Borderless SB-Jewellery Grid Layout -->
+        <div class="col-lg-10">
+            
+            <!-- Beautiful High-End Text-Based Filter System -->
+            <div class="luxury-sort-bar">
+                <span class="luxury-sort-label">Sort by:</span>
+                <button class="luxury-sort-link sort-btn active" data-sort="">Default</button>
+                <button class="luxury-sort-link sort-btn" data-sort="price_low_high">Price ↑</button>
+                <button class="luxury-sort-link sort-btn" data-sort="price_high_low">Price ↓</button>
+                <button class="luxury-sort-link sort-btn" data-sort="alpha_a_z">A — Z</button>
+                <button class="luxury-sort-link sort-btn" data-sort="alpha_z_a">Z — A</button>
+            </div>
+
+            <!-- Dynamic Product Matrix Row -->
+            <div class="row" id="productGridContainer">
+                {% include "product_grid_snippet.html" %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let currentCategoryId = "";
+    let currentSortValue = "";
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Handle Sidebar Category button clicks
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                currentCategoryId = this.getAttribute('data-category');
+                sendFilterRequest();
+            });
+        });
+
+        // Handle Minimalist Sort text links clicks
+        const sortButtons = document.querySelectorAll('.sort-btn');
+        sortButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                sortButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                currentSortValue = this.getAttribute('data-sort');
+                sendFilterRequest();
+            });
+        });
+    });
+
+    function sendFilterRequest() {
+        const targetContainer = document.getElementById('productGridContainer');
+        
+        let url = `/?sort_by=${currentSortValue}`;
+        if (currentCategoryId) {
+            url += `&category=${currentCategoryId}`;
+        }
+
+        fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.text())
+        .then(htmlSnippetOutputData => {
+            targetContainer.innerHTML = htmlSnippetOutputData;
+        })
+        .catch(error => console.error('Error upgrading catalogue matrix:', error));
+    }
+</script>
+{% endblock %}

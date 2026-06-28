@@ -1,0 +1,8 @@
+{
+    "python.analysis.extraPaths": [
+        "./venv/Lib/site-packages",
+        "./.venv/Lib/site-packages",
+        "./env/Lib/site-packages",
+        "C:/Users/Mini Hp/AppData/Local/Programs/Python/Python310/Lib/site-packages"
+    ]
+}

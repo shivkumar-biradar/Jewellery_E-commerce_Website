@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Cart | SB Jewellery{% endblock %}
+
+{% block content %}
+<style>
+    /* Premium Minimalist Cart Layout Styles */
+    .cart-wrapper {
+        max-width: 1000px;
+        margin: 4rem auto;
+        padding: 0 1.5rem;
+    }
+    .cart-header-title {
+        font-size: 1.75rem;
+        font-weight: 300;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #1a1a1a;
+        margin-bottom: 2.5rem;
+    }
+    /* Sleek Borderless Table Items Track */
+    .modern-cart-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .modern-cart-table th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #777777;
+        font-weight: 600;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #f2eee9;
+    }
+    .modern-cart-table td {
+        padding: 2rem 0;
+        border-bottom: 1px solid #fcfaf7;
+        vertical-align: middle;
+    }
+    .cart-item-img {
+        width: 90px;
+        height: 110px;
+        object-fit: cover;
+        border-radius: 4px;
+        background-color: #fcfaf7;
+    }
+    .cart-item-name {
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: #1a1a1a;
+        margin: 0;
+    }
+    .cart-item-price {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #000000;
+    }
+    /* Luxury Minimalist Quantity Control Pill */
+    .modern-qty-pill {
+        display: inline-flex;
+        align-items: center;
+        background-color: #f7f5f2;
+        border-radius: 4px;
+        padding: 4px;
+    }
+    .modern-qty-btn {
+        background: transparent !important;
+        border: none !important;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        color: #1a1a1a;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+        outline: none !important;
+    }
+    .modern-qty-btn:hover {
+        opacity: 0.6;
+    }
+    .modern-qty-val {
+        font-size: 0.9rem;
+        font-weight: 600;
+        min-width: 25px;
+        text-align: center;
+        color: #1a1a1a;
+    }
+    /* Elegant Minimalist Trash Action Trigger */
+    .modern-delete-btn {
+        background: transparent !important;
+        border: none !important;
+        color: #a3a3a3;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        padding: 5px 10px;
+    }
+    .modern-delete-btn:hover {
+        color: #b82323;
+        text-decoration: underline;
+    }
+    /* Checkout Control Panel styling details */
+    .cart-summary-panel {
+        margin-top: 3rem;
+        border-top: 1px solid #f2eee9;
+        padding-top: 2rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .btn-checkout-luxury {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+        border: none !important;
+        padding: 0.85rem 3rem !important;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 500;
+        border-radius: 2px;
+        transition: background-color 0.2s ease;
+    }
+    .btn-checkout-luxury:hover {
+        background-color: #333333 !important;
+    }
+</style>
+
+<div class="cart-wrapper">
+    <h1 class="cart-header-title">Shopping Cart</h1>
+    
+    <table class="modern-cart-table">
+        <thead>
+            <tr>
+                <th style="width: 15%;">Product</th>
+                <th style="width: 45%;">Details</th>
+                <th style="width: 15%;">Price</th>
+                <th style="width: 15%; text-align: center;">Quantity</th>
+                <th style="width: 10%; text-align: right;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td>
+                    <img class="cart-item-img" src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+                </td>
+                <td>
+                    <h4 class="cart-item-name">{{ item.product.name }}</h4>
+                </td>
+                <td>
+                    <span class="cart-item-price">₹ {{ item.product.price }}</span>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <div class="modern-qty-pill">
+                            <button type="button" class="modern-qty-btn" onclick="manageCart('{{ item.id }}', 'minus')">—</button>
+                            <span id="quantity-{{ item.id }}" class="modern-qty-val">{{ item.quantity }}</span>
+                            <button type="button" class="modern-qty-btn" onclick="manageCart('{{ item.id }}', 'plus')">+</button>
+                        </div>
+                    </div>
+                </td>
+                <td style="text-align: right;">
+                    <button type="button" class="modern-delete-btn" onclick="removeCartItem('{{ item.id }}')">Remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-summary-panel">
+        <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-checkout-luxury">Proceed to Checkout</button>
+    </div>
+</div>
+
+<!-- Modal Framework Structure (Unchanged but stylized headers) -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 8px;">
+      <div class="modal-header border-0 px-4 pt-4">
+        <h5 class="modal-title font-weight-light" id="exampleModalLabel" style="letter-spacing: 1px; text-transform: uppercase; font-size: 1.1rem;">Shipping Destination</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body px-4 pb-4">
+        <form action="{% url 'checkout' %}" method="POST">
+          {% csrf_token %}
+          <div class="form-group mt-2">
+            <label class="small text-muted text-uppercase font-weight-bold" style="letter-spacing: 0.5px;">Recipient Full Name</label>
+            <input required type="text" name="name" id="name" class="form-control form-control-lg border-muted" style="border-radius: 4px; font-size: 0.95rem; background-color: #faf8f5;" placeholder="John Doe">
+          </div>
+          <div class="form-group mt-3">
+            <label class="small text-muted text-uppercase font-weight-bold" style="letter-spacing: 0.5px;">Shipping Address</label>
+            <input required type="text" name="address" id="address" class="form-control form-control-lg" style="border-radius: 4px; font-size: 0.95rem; background-color: #faf8f5;" placeholder="Apartment, suite, street address">
+          </div>
+          <div class="form-group mt-3">
+            <label class="small text-muted text-uppercase font-weight-bold" style="letter-spacing: 0.5px;">Contact Mobile Number</label>
+            <input required type="text" name="mobile" id="mobile" class="form-control form-control-lg" style="border-radius: 4px; font-size: 0.95rem; background-color: #faf8f5;" placeholder="+91 XXXXX XXXXX">
+          </div>
+          <input type="submit" class="btn btn-block btn-checkout-luxury mt-4 py-3" value="Secure to Payment Gateway">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function manageCart(itemId, actionType) {
+    const url = actionType === 'plus' ? '/plus_cart/' : '/minus_cart/';
+    
+    fetch(`${url}?prod_id=${itemId}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network response failure');
+            return response.json();
+        })
+        .then(data => {
+            if (data.quantity <= 0) {
+                location.reload();
+            } else {
+                const qtySpan = document.getElementById(`quantity-${itemId}`);
+                if (qtySpan) {
+                    qtySpan.innerText = data.quantity;
+                }
+            }
+        })
+        .catch(error => console.error('Error during update processing:', error));
+}
+
+function removeCartItem(itemId) {
+    fetch(`/remove_cart/?prod_id=${itemId}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network response failure');
+            return response.json();
+        })
+        .then(data => {
+            location.reload();
+        })
+        .catch(error => console.error('Error during element removal:', error));
+}
+</script>
+{% endblock %}

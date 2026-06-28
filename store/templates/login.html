@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Customer Login{% endblock title %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row my-3 justify-content-center">
+        <div class="col-sm-6 col-md-5">
+
+            <!-- Clean, professional title alignment -->
+            <h3 class="fw-normal text-secondary mb-4 text-center" style="letter-spacing: 1px;">Customer Login</h3>
+            
+            <!-- Kept your form setup, but swapped heavy black shadows for an elegant, soft border -->
+            <form action="{% url 'login' %}" method="post" class="bg-white p-5 rounded-3" style="border: 1px solid #eaeaea; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+              
+                {% csrf_token %}
+
+                {% if error %}
+                    <div class="alert alert-danger border-0 small py-2" role="alert">
+                        {{error}}
+                    </div>
+                {% endif %}
+                
+                <!-- Kept your exact layout, but polished the spacing and typography -->
+                <div class="form-group mb-4">
+                    <label class="form-label text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Mobile No.</label>
+                    <input type="text" name="mobile" value="{{values.mobile|default:''}}" class="form-control form-control-lg bg-light border-0 px-3" placeholder="Enter Mobile no." style="font-size: 1rem; border-radius: 6px;">
+                </div>
+                
+                <!-- Replaced 'btn-info' with a premium, sleek brand button color -->
+                <div class="form-group mb-4">
+                    <input class="btn w-100 text-white fw-medium py-2" type="submit" value="Login" style="background-color: #D4AF37; border-radius: 6px; font-size: 1rem;">
+                </div>
+                
+                <!-- Clean, minimalist link text formatting -->
+                <div class="text-center pt-2">
+                    <span class="text-muted small">New user to SB jewellery?</span>
+                    <a href="/signup" class="small fw-semibold ms-1 text-decoration-none" style="color: #D4AF37;">Signup</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

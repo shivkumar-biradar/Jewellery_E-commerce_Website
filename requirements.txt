@@ -1,0 +1,17 @@
+asgiref==3.11.1
+certifi==2026.6.17
+charset-normalizer==3.4.7
+Django==5.2.15
+gunicorn==26.0.0
+idna==3.18
+packaging==26.2
+pillow==12.3.0
+python-decouple==3.8
+razorpay==2.0.1
+reportlab==5.0.0
+requests==2.34.2
+sqlparse==0.5.5
+typing_extensions==4.15.0
+tzdata==2026.2
+urllib3==2.7.0
+whitenoise==6.12.0

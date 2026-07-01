@@ -9,7 +9,6 @@ class AdminProduct(admin.ModelAdmin):
     list_display = ['id', 'name', 'price', 'category', 'description']
 
 class AdminCustomer(admin.ModelAdmin):
-    # Fixed: Changed 'phone' to 'mobile' to match your Customer model fields
     list_display = ['id', 'name', 'mobile']
 
 class AdminCart(admin.ModelAdmin):

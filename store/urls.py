@@ -1,10 +1,8 @@
 from django.contrib import admin
 from django.urls import path
-# from .views import home, signup
 from store import views
 
 urlpatterns = [
-    # Fixed: Added name='homepage' to the home view path
     path('', views.home, name='homepage'),
     path('search/', views.search_products, name='search_products'),
     path('signup/',views.Signup.as_view(), name='signup'),

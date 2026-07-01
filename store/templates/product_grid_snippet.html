@@ -4,6 +4,7 @@
         <div class="sb-jewellery-img-stage">
             <img src="{{product.image.url}}" alt="{{ product.name }}" />
         </div>
+        
         <div class="card-body p-0">
             <h5 class="sb-jewellery-product-name text-truncate">
                 {{ product.name }}
@@ -14,6 +15,7 @@
         </div>
     </a>
 </div>
+
 {% empty %}
 <div class="col-12 text-center py-5">
     <p class="text-muted font-weight-light">No premium items cataloged inside this collection loop vault.</p>

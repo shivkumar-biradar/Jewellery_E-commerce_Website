@@ -1,6 +1,8 @@
 from django.db import models
 from .product import Product
 
+
+
 class Wishlist(models.Model):
     phone = models.CharField(max_length=15) 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

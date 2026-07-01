@@ -5,8 +5,7 @@
     <title>Processing Test Payment...</title>
 </head>
 <body>
-    <!-- Container to dynamically update text on success -->
-    <div style="text-align: center; margin-top: 100px; font-family: sans-serif;">
+        <div style="text-align: center; margin-top: 100px; font-family: sans-serif;">
         <div id="status-container">
             <h2 style="color: #007bff;">Connecting to Server...</h2>
             <p>Verifying your test transaction credentials. Please wait.</p>
@@ -37,7 +36,6 @@
                     <p style="color: #555;">Your order is confirmed. Redirecting to your profile history shortly...</p>
                 `;
 
-                // DELAY: Wait 3000 milliseconds (3 seconds) before running redirect
                 setTimeout(() => {
                     window.location.href = "/order/"; 
                 }, 3000);

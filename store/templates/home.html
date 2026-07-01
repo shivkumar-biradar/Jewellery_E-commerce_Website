@@ -4,14 +4,12 @@
 
 {% block content %}
 <style>
-    /* 1. Global Reset to replicate the bright, clean, premium storefront layout */
     body {
         background-color: #ffffff !important;
         color: #1a1a1a !important;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     
-    /* 2. Left Collection Sidebar Filtering */
     .sb-jewellery-sidebar {
         position: sticky;
         top: 100px;
@@ -43,7 +41,6 @@
         font-weight: 700 !important;
     }
 
-    /* 3. Borderless Premium Product Grid Cards System */
     .sb-jewellery-card {
         border: none !important;
         background: transparent !important;
@@ -53,8 +50,8 @@
         margin-bottom: 2.5rem;
     }
     .sb-jewellery-img-stage {
-        background-color: #fcfaf7; /* Softer premium off-white background canvas card block */
-        height: 340px; /* Taller viewport bounds scale to display portrait self-modeling photos beautifully */
+        background-color: #fcfaf7; 
+        height: 340px; 
         display: flex;
         align-items: center;
         justify-content: center;
@@ -64,19 +61,19 @@
         transition: background-color 0.2s ease;
     }
     .sb-jewellery-card:hover .sb-jewellery-img-stage {
-        background-color: #f6f3ee; /* Smooth darkening transition shade on focus */
+        background-color: #f6f3ee; 
     }
     .sb-jewellery-img-stage img {
         height: 100%;
         width: 100%;
-        object-fit: cover; /* Enforces personal modeling portrait images to fill squares completely with zero blank gaps */
+        object-fit: cover; 
         transition: transform 0.4s ease-out;
     }
     .sb-jewellery-card:hover .sb-jewellery-img-stage img {
-        transform: scale(1.025); /* Subtle fluid macro lens zoom effect loop */
+        transform: scale(1.025); 
     }
 
-    /* Card Typography Layout adjustments outside and underneath image blocks */
+  
     .sb-jewellery-product-name {
         font-size: 0.88rem;
         color: #2c2c2c;
@@ -134,7 +131,6 @@
 <div class="container-fluid px-md-5 mt-5">
     <div class="row">
         
-        <!-- Left Side: Clean Minimalist Filter Navigation -->
         <div class="col-lg-2 mb-5">
             <div class="sb-jewellery-sidebar">
                 <div class="sb-jewellery-title">Categories</div>
@@ -151,10 +147,9 @@
             </div>
         </div>
 
-        <!-- Right Side: Borderless SB-Jewellery Grid Layout -->
+      
         <div class="col-lg-10">
             
-            <!-- Beautiful High-End Text-Based Filter System -->
             <div class="luxury-sort-bar">
                 <span class="luxury-sort-label">Sort by:</span>
                 <button class="luxury-sort-link sort-btn active" data-sort="">Default</button>
@@ -164,7 +159,6 @@
                 <button class="luxury-sort-link sort-btn" data-sort="alpha_z_a">Z — A</button>
             </div>
 
-            <!-- Dynamic Product Matrix Row -->
             <div class="row" id="productGridContainer">
                 {% include "product_grid_snippet.html" %}
             </div>
@@ -178,7 +172,7 @@
     let currentSortValue = "";
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Handle Sidebar Category button clicks
+        
         const categoryButtons = document.querySelectorAll('.category-btn');
         categoryButtons.forEach(button => {
             button.addEventListener('click', function(e) {
@@ -190,7 +184,6 @@
             });
         });
 
-        // Handle Minimalist Sort text links clicks
         const sortButtons = document.querySelectorAll('.sort-btn');
         sortButtons.forEach(button => {
             button.addEventListener('click', function(e) {

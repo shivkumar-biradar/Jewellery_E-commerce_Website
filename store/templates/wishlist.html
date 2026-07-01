@@ -1,57 +1,134 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-{% block title %}My Wishlist{% endblock %}
+{% block title %}
+  My Wishlist
+{% endblock %}
 
 {% block content %}
-<style>
+  <style>
     .sb-jewellery-card {
-        border: none !important;
-        background: transparent !important;
-        display: block;
-        margin-bottom: 2.5rem;
+      border: none !important;
+      background: transparent !important;
+      display: block;
+      margin-bottom: 2.5rem;
+      transition: opacity 0.3s ease; /* Smooth fade-out animation */
     }
     .sb-jewellery-img-stage {
-        background-color: #fcfaf7;
-        height: 340px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
-        overflow: hidden;
+      background-color: #fcfaf7;
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      overflow: hidden;
     }
     .sb-jewellery-img-stage img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
     }
-</style>
+    .product-title {
+      min-height: 48px;
+      margin-bottom: 0.25rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
 
-<div class="container my-5">
+  <div class="container my-5">
     <h3 class="mb-4 text-center">YOUR WISHLIST</h3>
-    <div class="row">
-        {% for item in wishlist_items %}
-        <div class="col-6 col-md-4 col-xl-3">
-            <div class="sb-jewellery-card">
-                <a href="{% url 'product-detail' item.product.id %}">
-                    <div class="sb-jewellery-img-stage">
-                        <img src="{{ item.product.image.url }}" alt="" />
-                    </div>
-                </a>
-                <div class="p-0 mt-2">
-                    <h5>{{ item.product.name }}</h5>
-                    <p>₹ {{ item.product.price }}</p>
-                    <a href="{% url 'toggle_wishlist' %}?prod_id={{ item.product.id }}" class="btn btn-sm btn-link text-danger p-0">
-                         Remove
-                    </a>
-                </div>
+
+    <!-- Added id="wishlist-container" here -->
+    <div class="row" id="wishlist-container">
+      {% for item in wishlist_items %}
+        <!-- Added id="wishlist-item-{{ item.product.id }}" to identify the card wrapper -->
+        <div class="col-6 col-md-4 col-xl-3" id="wishlist-item-{{ item.product.id }}">
+          <div class="sb-jewellery-card">
+            <a href="{% url 'product-detail' item.product.id %}">
+              <div class="sb-jewellery-img-stage">
+                <img src="{{ item.product.image.url }}" alt="" />
+              </div>
+            </a>
+            <div class="p-0 mt-2">
+              <h5 class="product-title">{{ item.product.name }}</h5>
+              <p class="mb-1">₹ {{ item.product.price }}</p>
+
+              <!-- Changed href to javascript:void(0) and added data attributes + class -->
+              <a href="javascript:void(0);" data-url="{% url 'toggle_wishlist' %}" data-product-id="{{ item.product.id }}" class="btn btn-sm btn-link text-danger p-0 remove-wishlist-btn">Remove</a>
             </div>
+          </div>
         </div>
-        {% empty %}
-        <div class="col-12 text-center py-5">
-            <p class="text-muted">Your wishlist is empty.</p>
-            <a href="{% url 'homepage' %}" class="btn btn-dark btn-sm">Shop Now</a>
+      {% empty %}
+        <div class="col-12 text-center py-5" id="empty-wishlist-message">
+          <p class="text-muted">Empty, but ready to be filled!</p>
+          <a href="{% url 'homepage' %}" class="btn btn-dark btn-sm">Shop Now</a>
         </div>
-        {% endfor %}
+      {% endfor %}
     </div>
-</div>
+  </div>
+
+  <!-- JavaScript to handle the instant removal -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const container = document.getElementById('wishlist-container')
+    
+      container.addEventListener('click', function (e) {
+        // Check if the clicked element is our remove button
+        if (e.target.classList.contains('remove-wishlist-btn')) {
+          e.preventDefault()
+    
+          const button = e.target
+          const baseUrl = button.getAttribute('data-url')
+          const productId = button.getAttribute('data-product-id')
+    
+          // Build the URL with the product ID parameter
+          const targetUrl = `${baseUrl}?prod_id=${productId}`
+    
+          // Send the request in the background
+          fetch(targetUrl, {
+            method: 'GET',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest' // Lets Django know it is an AJAX call
+            }
+          })
+            .then((response) => {
+              if (response.ok) {
+                // Get the badge element
+                const badge = document.getElementById('wishlist-badge')
+                // Subtract 1 from whatever number is currently inside it
+                if (badge) badge.textContent = (parseInt(badge.textContent) || 1) - 1
+    
+                // Find the column item container for this specific product
+                const itemContainer = document.getElementById(`wishlist-item-${productId}`)
+    
+                if (itemContainer) {
+                  // Apply a smooth fade out effect
+                  itemContainer.style.opacity = '0'
+    
+                  setTimeout(() => {
+                    itemContainer.remove()
+    
+                    // If no products are left, show the empty message dynamically
+                    const remainingItems = container.querySelectorAll('[id^="wishlist-item-"]')
+                    if (remainingItems.length === 0) {
+                      container.innerHTML = `
+                                        <div class="col-12 text-center py-5" id="empty-wishlist-message">
+                                            <p class="text-muted">Empty, but ready to be filled!</p>
+                                            <a href="{% url 'homepage' %}" class="btn btn-dark btn-sm">Shop Now</a>
+                                        </div>
+                                    `
+                    }
+                  }, 300) // Matches the 0.3s transition in CSS
+                }
+              } else {
+                console.error('Failed to remove item.')
+              }
+            })
+            .catch((error) => console.error('Error:', error))
+        }
+      })
+    })
+  </script>
 {% endblock %}

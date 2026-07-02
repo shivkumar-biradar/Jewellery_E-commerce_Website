@@ -1,5 +1,11 @@
 # 💎 Jewellery E-Commerce Website
 
+## 🌐 Live Demo
+
+🔗 https://jewellery-e-commerce-website-iw1b.onrender.com
+
+---
+
 A full-stack Jewellery E-Commerce web application developed using **Python, Django, HTML, CSS, Bootstrap, JavaScript, and MySQL**. The application provides a modern online shopping experience with product browsing, wishlist management, shopping cart, user authentication, checkout, order management, and Razorpay test payment integration.
 
 ---
@@ -39,6 +45,7 @@ A full-stack Jewellery E-Commerce web application developed using **Python, Djan
 
 ### Database
 - MySQL
+- SQLite
 
 ### Payment Gateway
 - Razorpay (Test Mode)
@@ -48,16 +55,16 @@ A full-stack Jewellery E-Commerce web application developed using **Python, Djan
 ## 📂 Project Structure
 
 ```
-SB_Jewellery/
+shopping_project/
 │
-├── app/
-├── templates/
-├── static/
-├── media/
-├── db.sqlite3
+├── shopping_project/
+├── store/
+├── upload/
+├── staticfiles/
 ├── manage.py
 ├── requirements.txt
 └── README.md
+
 ```
 
 ---
@@ -67,13 +74,13 @@ SB_Jewellery/
 Clone the repository
 
 ```bash
-git clone https://github.com/shivkumar-biradar/SB_Jewellery.git
+git clone https://github.com/shivkumar-biradar/Jewellery_E-commerce_Website.git
 ```
 
 Go to the project directory
 
 ```bash
-cd SB_Jewellery
+cd Jewellery_E-commerce_Website
 ```
 
 Create virtual environment

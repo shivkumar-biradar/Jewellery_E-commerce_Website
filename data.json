@@ -225,8 +225,8 @@
     "name": "Wave Bracelet",
     "price": 1130,
     "category": 1,
-    "description": null,
-    "image": "media/upload/products/image_4ec8fc5d-0a10-419e-9521-09245b333b46"
+    "description": "Wave Bracelet flows with effortless elegance, designed in stainless steel and finished with radiant 18K gold plating. Its sleek, fluid design captures the beauty of gentle waves .",
+    "image": "media/upload/products/image_c90e8728-1eee-42ec-a567-ed38c0eb5340_bplxwy"
   }
 },
 {
@@ -236,7 +236,7 @@
     "name": "Daisy Flower Necklace",
     "price": 2500,
     "category": 3,
-    "description": null,
+    "description": "Fresh, charming, and feminine, the Daisy Flower Necklace features delicate daisy motifs in a radiant gold-tone finish. Its playful station design adds elegance and a touch of whimsy .",
     "image": "media/upload/products/NK346_c66afb20-7267-4bba-9de8-890e73bf463b_xnr64v"
   }
 },
@@ -246,17 +246,6 @@
   "fields": {
     "name": "Shivkumar ",
     "mobile": "6366127066"
-  }
-},
-{
-  "model": "store.cart",
-  "pk": 64,
-  "fields": {
-    "phone": 6366127066,
-    "product": 1,
-    "image": "upload/products/BR076_2_8bc9ca8e-87b..._imresizer.webp",
-    "quantity": 3,
-    "price": 2659
   }
 },
 {
@@ -270,15 +259,6 @@
     "price": 2659,
     "ordered_date": "2026-06-30T15:15:47.583Z",
     "status": "Paid"
-  }
-},
-{
-  "model": "store.wishlist",
-  "pk": 52,
-  "fields": {
-    "phone": "6366127066",
-    "product": 2,
-    "added_date": "2026-07-02T11:14:16.121Z"
   }
 }
 ]

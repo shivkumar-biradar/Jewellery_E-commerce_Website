@@ -74,13 +74,13 @@ shopping_project/
 Clone the repository
 
 ```bash
-git clone https://github.com/shivkumar-biradar/Jewellery_E-commerce_Website.git
+git clone https://github.com/shivkumar-biradar/Jewellery-E-commerce-Website.git
 ```
 
 Go to the project directory
 
 ```bash
-cd Jewellery_E-commerce_Website
+cd Jewellery-E-commerce-Website
 ```
 
 Create virtual environment
